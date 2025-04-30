@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, Text
+from sqlalchemy import ForeignKey, Text, Enum
 from uuid import UUID
 
 from src.db.domain.database import Base
+from src.db.projects.enums import Color
 
 class User(Base):
     __tablename__: str = "users"
@@ -21,13 +22,13 @@ class Task(Base):
     importance_status: Mapped[str]
     color: Mapped[str]
     project_id: Mapped[UUID] = mapped_column(ForeignKey("projects.id"))
+    creator_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     creator: Mapped["User"] = relationship(back_populates="tasks")
     performers_ids: Mapped[list["User"] | None] = relationship(
         User,
         secondary="m2m_users_tasks",
         lazy="selectin"
     )
-    creator: Mapped["User"] = relationship(back_populates="tasks")
 
 class Project(Base):
     __tablename__: str = "projects"
@@ -35,12 +36,13 @@ class Project(Base):
     name: Mapped[str] = mapped_column(default="nameless project")
     description: Mapped[str | None] = mapped_column(Text)
     color: Mapped[str]
-    creator: Mapped["User"] = relationship(back_populates="projects")
-    performers_ids: Mapped[list["User"] | None] = relationship(
+    performers_ids: Mapped[list[User]] = relationship(
         User,
         secondary="m2m_users_projects",
-        lazy="selectin"
+        lazy="selectin",
     )
+    creator_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    creator: Mapped["User"] = relationship(back_populates="projects")
 
 class UserProject(Base):
     __tablename__: str = "m2m_users_projects"
