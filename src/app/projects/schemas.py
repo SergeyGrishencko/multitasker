@@ -1,8 +1,7 @@
 from pydantic import BaseModel
-from uuid import UUID
 from datetime import date
 
-from src.db.projects.enums import Color
+from src.db.domain.enums import Color
 
 class CreateProjectSchema(BaseModel):
     name: str

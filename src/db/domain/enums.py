@@ -9,3 +9,8 @@ class Color(str, Enum):
     orange = "orange"
     dark = "dark"
     white = "white"
+
+class ImportanceStatus(str, Enum):
+    very_urgent = "very_urgent"
+    urgently = "urgently"
+    not_urgent = "not urgent"

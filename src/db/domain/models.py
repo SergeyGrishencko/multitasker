@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, Text, Enum
+from sqlalchemy import ForeignKey, Text
 from uuid import UUID
 
 from src.db.domain.database import Base
-from src.db.projects.enums import Color
 
 class User(Base):
     __tablename__: str = "users"
