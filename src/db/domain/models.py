@@ -29,6 +29,16 @@ class Task(Base):
         lazy="selectin"
     )
 
+class Subtask(Base):
+    __tablename__: str = "subtasks"
+
+    name: Mapped[str] = mapped_column(default="nameless subtask")
+    description: Mapped[str] = mapped_column(Text)
+    importance_status: Mapped[str]
+    task_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.id", ondelete="SET NULL"), nullable=False)
+    creator_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    performer_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
 class Project(Base):
     __tablename__: str = "projects"
 
